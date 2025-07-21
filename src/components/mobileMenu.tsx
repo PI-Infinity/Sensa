@@ -56,10 +56,10 @@ const MobileMenu = () => {
             <Link href={item.path} key={item.path}>
               <h4
                 style={{
-                  color: pathname === item.path ? theme.active : theme.text,
+                  color: pathname === item.path ? theme.active : "#888",
                   transition: "ease-in 200ms",
                 }}
-                className={`cursor-pointer hover:opacity-[1] ${
+                className={`font-secondFont cursor-pointer hover:opacity-[1] ${
                   pathname === item.path ? "opacity-1" : "opacity-[0.5]"
                 }`}
               >
@@ -76,9 +76,8 @@ const MobileMenu = () => {
         <div
           onClick={() => changeLanguage("en")}
           style={{
-            opacity: language === "en" ? 1 : 0.5,
+            color: language === "en" ? theme.text : "#888",
             fontSize: "14px",
-            color: theme.text,
           }}
           className={` ${
             language !== "en"
@@ -96,9 +95,8 @@ const MobileMenu = () => {
           }`}
           onClick={() => changeLanguage("ka")}
           style={{
-            opacity: language == "ka" ? 1 : 0.5,
+            color: language == "ka" ? theme.text : "#888",
             fontSize: "14px",
-            color: theme.text,
           }}
         >
           ქართული
@@ -112,9 +110,8 @@ const MobileMenu = () => {
           }`}
           onClick={() => changeLanguage("ru")}
           style={{
-            opacity: language === "ru" ? 1 : 0.5,
+            color: language === "ru" ? theme.text : "#888",
             fontSize: "14px",
-            color: theme.text,
           }}
         >
           Русский

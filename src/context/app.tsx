@@ -43,11 +43,11 @@ export const AppContextWrapper: React.FC<contextProps> = ({ children }) => {
     if (localTheme) {
       let parseObject = JSON.parse(localTheme);
       document.body.style.background = parseObject.gradient;
-      document.documentElement.style.background = parseObject.background;
+      document.documentElement.style.background = "rgba(0, 0, 255, 0.03)";
       setTheme(parseObject);
     } else {
       document.body.style.background = colors[1].gradient;
-      document.documentElement.style.background = colors[1].background;
+      document.documentElement.style.background = "rgba(0, 0, 255, 0.03)";
       setTheme(colors[1]);
     }
   }, []);

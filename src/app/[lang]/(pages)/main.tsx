@@ -41,7 +41,7 @@ const Main = () => {
         style={{ color: theme.text }}
         className="w-full h-full slide-in-right flex flex-row gap-16 relative overflow-hidden desktop:mt-20 desktop:py-24"
       >
-        <div className="w-full desktop:w-2/5 desktop:ml-16 flex flex-col justify-center items-center gap-8">
+        <div className="relative bottom-8 w-full desktop:w-2/5 desktop:ml-16 flex flex-col justify-center items-center gap-8">
           <div
             style={{
               boxShadow: isMobile

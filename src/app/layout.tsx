@@ -82,7 +82,7 @@ export default async function RootLayout({
           <AppContextWrapper>
             {/* <GoogleAnalytics gaId="G-PRTE7FTLBK" /> */}
             <UserInitializer />
-            <Loading />
+            {/* <Loading /> */}
             <Header />
             <MobileMenu />
             <SimpleSnackbar />

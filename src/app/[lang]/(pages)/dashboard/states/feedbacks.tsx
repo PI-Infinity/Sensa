@@ -421,7 +421,7 @@ export const Feedbacks = ({ data, setData }: any) => {
               <div
                 ref={scrollRef}
                 onScroll={handleScroll}
-                className="w-full h-full relative overflow-y-auto border flex flex-col rounded-xl p-2 desktop:p-4 gap-2"
+                className="w-full h-[60vh] desktop:h-[70vh] relative overflow-y-auto border flex flex-col rounded-xl p-2 desktop:p-4 gap-2"
               >
                 {feedbackStats?.feedbacks.map((fb: any) => (
                   <div

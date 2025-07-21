@@ -15,7 +15,7 @@ const AboutUs = () => {
         className="desktop:py-16"
         style={{ color: theme.text, display: loading ? "none" : "flex" }}
       >
-        <div className="w-full h-full px-4 py-4 pt-[100px] slide-in-top pt-8 flex flex-col items-center">
+        <div className="w-full h-full px-8 py-4 pt-[90px] slide-in-top flex flex-col items-center">
           {texts.map((item: any, index: number) => {
             return (
               <div className="w-full desktop:max-w-[50%] mx-auto" key={index}>

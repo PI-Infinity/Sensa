@@ -7,7 +7,12 @@ import { RiMenuUnfold2Fill } from "react-icons/ri";
 const Header = ({ setOpenMenu }: any) => {
   const { language, isMobile } = useAppContext();
   return (
-    <div className="w-[100%] h-[60px] px-6 flex border items-center justify-between">
+    <div
+      style={{
+        background: "rgba(0, 0, 255, 0.03)",
+      }}
+      className="w-[100%] h-[60px] px-6 flex border-b items-center justify-between"
+    >
       <div className="flex items-center gap-4">
         {isMobile && (
           <div

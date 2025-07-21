@@ -32,9 +32,12 @@ const Header = () => {
     >
       <NextTopLoader showSpinner={false} height={4} />
       <header
+        style={{
+          background: isMobile ? "rgba(0, 0, 255, 0.03)" : "transparent",
+        }}
         className="w-full h-full
       flex items-center justify-between 
-      py-2 desktop:py-[12px] px-6 desktop:px-16 shadow-sm desktop:shadow-md desktop:border-b-[4px] desktop:border-b-[rgba(255,255,255,0.2)]"
+       desktop:py-[12px] px-6 desktop:px-16 shadow-sm desktop:shadow-md desktop:border-b-[4px] desktop:border-b-[rgba(255,255,255,0.2)]"
       >
         <Link
           href={`/${language}`}
