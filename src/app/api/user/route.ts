@@ -1,3 +1,4 @@
+import { connectDB } from "@/app/db";
 import { Feedback } from "@/app/models/feedbackModel";
 import { User } from "@/app/models/userModel";
 import { auth } from "@clerk/nextjs/server";
@@ -8,7 +9,7 @@ export async function GET() {
     const { userId } = await auth();
     if (!userId)
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
+    await connectDB();
     const user: any = await User.findOne({ clerkId: userId }).lean();
 
     const unreadCount = await Feedback.countDocuments({
