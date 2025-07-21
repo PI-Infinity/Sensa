@@ -16,7 +16,6 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.2",
     "@mui/material": "^7.1.2",
-    "@next/third-parties": "^14.2.23",
     "axios": "^1.8.4",
     "firebase": "^11.9.1",
     "firebase-admin": "^13.4.0",
