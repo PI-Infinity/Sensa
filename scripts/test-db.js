@@ -1,5 +1,4 @@
 // scripts/test-db.js
-require("dotenv").config();
 const { connectDB } = require("../lib/mongodb");
 
 (async () => {
