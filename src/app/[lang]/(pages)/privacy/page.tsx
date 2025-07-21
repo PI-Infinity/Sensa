@@ -5,191 +5,174 @@ import Cookies from "js-cookie";
 import { useAppContext } from "@/context/app";
 import { Suspense } from "react";
 
-const privacyContent: any = {
+export const privacyContent: any = {
   en: {
     title: "Privacy Policy",
     last_update: "Last Updated",
     overview: "Overview",
-    overview_text: `Sarko Events ("we", "company") takes your privacy seriously. 
-      This Privacy Policy explains how we collect, use, and protect your 
-      information when using our website and services.`,
+    overview_text: `Sensa ("we", "company") respects your privacy and is committed to protecting your personal data. This Privacy Policy describes how we collect, use, and safeguard information through our QR-based feedback platform.`,
     accept_text:
       "By using our services, you agree to the terms described in this Privacy Policy.",
     collect_info: "What Information We Collect",
     personal_info: "📌 Personal Information",
     personal_info_list: [
-      "Full Name",
-      "Phone Number",
-      "Email Address",
-      "Postal Address",
-      "Payment details (processed through secure third-party payment systems)",
+      "Full Name (optional)",
+      "Email Address (optional)",
+      "Feedback content (e.g. comments, selected emoji or stars)",
     ],
     general_info: "📌 Non-Personal Information",
     general_info_list: [
-      "Device information (IP address, browser type, OS)",
-      "Website activity and usage statistics",
-      "Cookies and other tracking technologies",
+      "Device and browser information",
+      "IP address and location (if permitted)",
+      "QR code scan metadata (timestamp, page, response type)",
     ],
     usage: "How We Use Your Information",
     usage_list: [
-      "📌 Providing and improving our services",
-      "📌 Customer support",
-      "📌 Order processing",
-      "📌 Compliance with legal obligations",
-      "📌 Marketing communications (with your consent)",
-      "📌 Fraud prevention and security risk management",
+      "📌 To deliver feedback functionality",
+      "📌 To generate analytics and insights for businesses",
+      "📌 To improve platform performance",
+      "📌 To ensure security and prevent misuse",
     ],
     share_data: "Data Sharing with Third Parties",
-    share_data_text: `We do not sell or rent your personal data to third parties. 
-      However, data sharing may occur under the following conditions:`,
+    share_data_text: `We do not sell your personal information. We may share minimal necessary data with third parties under these conditions:`,
     share_data_list: [
-      "Service providers (payments, hosting, customer support)",
-      "Law enforcement or legal requests",
-      "Business transactions (e.g., mergers or acquisitions)",
+      "Service providers (hosting, analytics)",
+      "Law enforcement (if legally required)",
+      "Business transfers (e.g. acquisition)",
     ],
     rights: "Your Rights & Choices",
     rights_list: [
-      "🔹 Access or delete your data",
-      "🔹 Manage privacy settings",
-      "🔹 Opt-out of marketing communications",
+      "🔹 Request access or deletion of personal data",
+      "🔹 Opt out of marketing (if applicable)",
+      "🔹 Review and update privacy settings",
     ],
     security: "Security Measures",
     security_text:
-      "We use appropriate security measures, but no system can guarantee 100% protection.",
+      "We use modern technical and organizational security practices. However, no system can be 100% secure.",
     children: "Children's Privacy",
     children_text:
-      "Our services are not intended for children under 18. If we discover data from minors, we will delete it.",
+      "Sensa is not intended for children under 13. If we discover data from a minor, we will remove it promptly.",
     links: "Third-Party Links",
     links_text:
-      "Our site may contain links to external websites. Please review their privacy policies separately.",
+      "Some QR pages may link to external websites. We are not responsible for their content or privacy practices.",
     updates: "Policy Updates",
     updates_text:
-      "We may update this policy. Check back periodically for changes.",
+      "We may update this policy periodically. Continued use of the platform indicates acceptance of changes.",
     contact: "Contact Us",
     email: "Email",
     website: "Website",
   },
+
   ka: {
     title: "კონფიდენციალურობის პოლიტიკა",
     last_update: "ბოლო განახლება",
     overview: "ზოგადი მიმოხილვა",
-    overview_text: `Sarko Events ("ჩვენ", "კომპანია") სერიოზულად ეკიდება თქვენს პირად მონაცემთა დაცვას. 
-      ეს კონფიდენციალურობის პოლიტიკა განმარტავს, როგორ ვაგროვებთ, ვიყენებთ და ვიცავთ თქვენს ინფორმაციას.`,
+    overview_text: `Sensa ("ჩვენ", "კომპანია") აფასებს თქვენს კონფიდენციალურობას და იცავს თქვენს პირად მონაცემებს. ეს პოლიტიკა განმარტავს, როგორ აგროვებს, იყენებს და იცავს სისტემაში მოწოდებულ ინფორმაციას.`,
     accept_text:
-      "თქვენი მომსახურების გამოყენებით, თქვენ ეთანხმებით ამ კონფიდენციალურობის პოლიტიკას.",
+      "სერვისის გამოყენებით, თქვენ ეთანხმებით აღნიშნულ კონფიდენციალურობის პოლიტიკას.",
     collect_info: "რა ინფორმაციას ვაგროვებთ",
     personal_info: "📌 პირადი ინფორმაცია",
     personal_info_list: [
-      "სახელი და გვარი",
-      "ტელეფონის ნომერი",
-      "ელფოსტის მისამართი",
-      "საფოსტო მისამართი",
-      "გადახდის დეტალები (უსაფრთხო გადახდის სისტემის გამოყენებით)",
+      "სრული სახელი (სურვილისამებრ)",
+      "ელფოსტის მისამართი (სურვილისამებრ)",
+      "უკუკავშირის შინაარსი (კომენტარი, ემოჯი, ვარსკვლავები)",
     ],
-    general_info: "📌 არასპეციფიკური ინფორმაცია",
+    general_info: "📌 ზოგადი ინფორმაცია",
     general_info_list: [
-      "მოწყობილობის ინფორმაცია (IP მისამართი, ბრაუზერის ტიპი, ოპერაციული სისტემა)",
-      "ვებსაიტზე განხორციელებული ქმედებები და გამოყენების სტატისტიკა",
-      "Cookies და სხვა ტექნოლოგიები",
+      "მოწყობილობისა და ბრაუზერის ტიპი",
+      "IP მისამართი და მდებარეობა (თუ ნებადართულია)",
+      "QR სკანის მონაცემები (დრო, გვერდი, უკუკავშირის ტიპი)",
     ],
-    usage: "როგორ ვიყენებთ თქვენს ინფორმაციას",
+    usage: "როგორ ვიყენებთ თქვენს მონაცემებს",
     usage_list: [
-      "📌 ჩვენი მომსახურების მიწოდება და გაუმჯობესება",
-      "📌 მომხმარებელთა მხარდაჭერის გაწევა",
-      "📌 შეკვეთების დამუშავება",
-      "📌 სამართლებრივი ვალდებულებების დაცვა",
-      "📌 მარკეტინგული კომუნიკაციების გაგზავნა (თქვენი თანხმობით)",
-      "📌 თაღლითობის და უსაფრთხოების რისკების მართვა",
+      "📌 უკუკავშირის ფუნქციონალის უზრუნველსაყოფად",
+      "📌 ანალიტიკისა და მონაცემების გენერირებისთვის ბიზნესებისთვის",
+      "📌 პლატფორმის ხარისხის გაუმჯობესებისთვის",
+      "📌 უსაფრთხოების და ბოროტად გამოყენების პრევენციისთვის",
     ],
-    share_data: "მონაცემთა გაზიარება მესამე მხარეებთან",
-    share_data_text: `ჩვენ არ ვყიდით თქვენს მონაცემებს, მაგრამ ზოგიერთ შემთხვევაში გაზიარება შეიძლება:`,
+    share_data: "მონაცემების გაზიარება მესამე მხარეებთან",
+    share_data_text: `ჩვენ არ ვყიდით თქვენს პერსონალურ მონაცემებს. გაზიარება შეიძლება მოხდეს შემდეგ შემთხვევებში:`,
     share_data_list: [
-      "მომსახურების მომწოდებლები (გადახდა, ჰოსტინგი, მხარდაჭერა)",
-      "სამართალდამცავი ორგანოები, კანონით მოთხოვნილი მხარეები",
-      "ბიზნეს ტრანზაქციები (შერწყმა ან შეძენა)",
+      "სერვისის მომწოდებლები (ჰოსტინგი, ანალიტიკა)",
+      "სამართლებრივი მოთხოვნის შემთხვევაში",
+      "ბიზნესის გადაცემისას (მაგ. შეძენა)",
     ],
     rights: "თქვენი უფლებები და არჩევანი",
     rights_list: [
-      "🔹 მონაცემების მიღება ან წაშლა",
-      "🔹 კონფიდენციალურობის პარამეტრების მართვა",
+      "🔹 პერსონალური მონაცემების წვდომა ან წაშლა",
       "🔹 სარეკლამო შეტყობინებების გაუქმება",
+      "🔹 კონფიდენციალურობის პარამეტრების გადახედვა",
     ],
     security: "უსაფრთხოების ზომები",
     security_text:
-      "ჩვენ ვიყენებთ შესაბამის უსაფრთხოების ზომებს, მაგრამ არანაირი სისტემა 100%-ით დაცული არ არის.",
-    children: "ბავშვთა კონფიდენციალურობა",
+      "ჩვენ ვიყენებთ თანამედროვე ტექნიკურ და ორგანიზაციულ უსაფრთხოების ზომებს, თუმცა არცერთი სისტემა არაა სრულად დაცული.",
+    children: "მიუწვდომელია ბავშვებისთვის",
     children_text:
-      "ჩვენი სერვისი 18 წლამდე პირებისთვის არ არის განკუთვნილი. თუ აღმოვაჩენთ, რომ არასრულწლოვანის მონაცემებია, წავშლით.",
-    links: "მესამე მხარის ბმულები",
+      "Sensa არ არის განკუთვნილი 13 წლამდე ბავშვებისთვის. აღმოჩენის შემთხვევაში მათი მონაცემები წაიშლება.",
+    links: "გარე ბმულები",
     links_text:
-      "ჩვენი ვებსაიტი შეიძლება შეიცავდეს გარე ბმულებს. გთხოვთ, გაეცნოთ მათ კონფიდენციალურობის პოლიტიკას.",
+      "ზოგიერთ QR გვერდზე შეიძლება იყოს გარე ბმულები. ჩვენ არ ვაგებთ პასუხს მესამე მხარის კონტენტსა და პოლიტიკაზე.",
     updates: "პოლიტიკის განახლება",
     updates_text:
-      "ჩვენ პერიოდულად განვაახლებთ კონფიდენციალურობის პოლიტიკას. გირჩევთ, გადაამოწმოთ.",
+      "პოლიტიკა შეიძლება პერიოდულად განახლდეს. პლატფორმის გამოყენება ითვლება ცვლილებების მიღებად.",
     contact: "კონტაქტი",
     email: "ელფოსტა",
     website: "ვებსაიტი",
   },
+
   ru: {
     title: "Политика конфиденциальности",
     last_update: "Последнее обновление",
     overview: "Обзор",
-    overview_text: `Sarko Events ("мы", "компания") серьезно относится к вашей конфиденциальности. 
-      Настоящая Политика конфиденциальности объясняет, как мы собираем, используем и защищаем 
-      вашу информацию при использовании нашего веб-сайта и услуг.`,
+    overview_text: `Sensa ("мы", "компания") уважает вашу конфиденциальность и защищает ваши персональные данные. Настоящая политика объясняет, как мы собираем, используем и обрабатываем данные через нашу платформу отзывов на основе QR-кодов.`,
     accept_text:
-      "Используя наши услуги, вы соглашаетесь с условиями, описанными в данной Политике конфиденциальности.",
+      "Используя наш сервис, вы соглашаетесь с настоящей политикой конфиденциальности.",
     collect_info: "Какие данные мы собираем",
-    personal_info: "📌 Личная информация",
+    personal_info: "📌 Персональные данные",
     personal_info_list: [
-      "Полное имя",
-      "Номер телефона",
-      "Адрес электронной почты",
-      "Почтовый адрес",
-      "Платежные данные (обрабатываются через безопасные сторонние платежные системы)",
+      "Полное имя (необязательно)",
+      "Электронная почта (необязательно)",
+      "Содержание отзыва (комментарии, эмодзи, звезды)",
     ],
-    general_info: "📌 Неличная информация",
+    general_info: "📌 Общая информация",
     general_info_list: [
-      "Информация об устройстве (IP-адрес, тип браузера, операционная система)",
-      "Активность на сайте и статистика использования",
-      "Файлы cookie и другие технологии отслеживания",
+      "Информация об устройстве и браузере",
+      "IP-адрес и местоположение (если разрешено)",
+      "Метаданные сканирования QR (время, страница, тип отзыва)",
     ],
-    usage: "Как мы используем вашу информацию",
+    usage: "Как мы используем ваши данные",
     usage_list: [
-      "📌 Предоставление и улучшение наших услуг",
-      "📌 Обслуживание клиентов",
-      "📌 Обработка заказов",
-      "📌 Соблюдение юридических обязательств",
-      "📌 Маркетинговые рассылки (с вашего согласия)",
-      "📌 Предотвращение мошенничества и управление рисками безопасности",
+      "📌 Обеспечение функциональности обратной связи",
+      "📌 Генерация аналитики для бизнеса",
+      "📌 Повышение качества платформы",
+      "📌 Обеспечение безопасности и предотвращение злоупотреблений",
     ],
-    share_data: "Передача данных третьим сторонам",
-    share_data_text: `Мы не продаем и не сдаем в аренду ваши персональные данные третьим сторонам. 
-      Однако передача данных может осуществляться в следующих случаях:`,
+    share_data: "Передача данных третьим лицам",
+    share_data_text: `Мы не продаем ваши персональные данные. Возможна передача ограниченной информации при следующих условиях:`,
     share_data_list: [
-      "Поставщики услуг (платежи, хостинг, поддержка клиентов)",
-      "Запросы правоохранительных органов или юридические требования",
-      "Бизнес-сделки (например, слияния или поглощения)",
+      "Поставщики услуг (хостинг, аналитика)",
+      "Запросы государственных органов",
+      "Передача компании или её части",
     ],
     rights: "Ваши права и выбор",
     rights_list: [
       "🔹 Доступ или удаление ваших данных",
+      "🔹 Отказ от маркетинга",
       "🔹 Управление настройками конфиденциальности",
-      "🔹 Отказ от маркетинговых рассылок",
     ],
     security: "Меры безопасности",
     security_text:
-      "Мы применяем соответствующие меры безопасности, но ни одна система не может гарантировать 100% защиту.",
+      "Мы применяем современные меры защиты, но ни одна система не может гарантировать 100% безопасность.",
     children: "Конфиденциальность детей",
     children_text:
-      "Наши услуги не предназначены для детей младше 18 лет. Если мы обнаружим данные несовершеннолетних, мы их удалим.",
-    links: "Сторонние ссылки",
+      "Sensa не предназначена для детей младше 13 лет. При обнаружении данных — они будут удалены.",
+    links: "Ссылки на сторонние ресурсы",
     links_text:
-      "Наш сайт может содержать ссылки на внешние ресурсы. Ознакомьтесь с их политиками конфиденциальности отдельно.",
+      "Некоторые QR-страницы могут содержать внешние ссылки. Мы не несем ответственности за их политику.",
     updates: "Обновления политики",
     updates_text:
-      "Мы можем обновлять данную политику. Проверяйте периодически наличие изменений.",
-    contact: "Свяжитесь с нами",
+      "Мы можем обновлять эту политику. Использование сервиса означает согласие с изменениями.",
+    contact: "Связаться с нами",
     email: "Электронная почта",
     website: "Веб-сайт",
   },
@@ -233,11 +216,11 @@ function Main() {
 
   return (
     <div
-      className="p-6 text-white desktop:mt-24 mt-24 desktop:px-24 flex-col"
+      className="p-6 text-black desktop:mt-24 mt-24 desktop:px-24 flex-col"
       style={{ display: loading ? "none" : "flex" }}
     >
       <h1 className="text-2xl font-bold">{content.title}</h1>
-      <p className=" text-white mb-4 mt-2">
+      <p className=" text-black mb-4 mt-2">
         {content.last_update}: [15.03.2025]
       </p>
       <section>
@@ -254,7 +237,7 @@ function Main() {
         </ul>
       </section>
       <section className="mb-6 mt-4">
-        <h2 className="text-xl font-semibold text-white mb-3">
+        <h2 className="text-xl font-semibold text-black mb-3">
           {content.share_data}
         </h2>
         <p>{content.share_data_text}</p>
@@ -266,7 +249,7 @@ function Main() {
       </section>
 
       <section className="mb-6">
-        <h2 className="text-xl font-semibold text-white mb-3">
+        <h2 className="text-xl font-semibold text-black mb-3">
           {content.rights}
         </h2>
         <ul className="list-disc list-inside">
@@ -277,54 +260,54 @@ function Main() {
       </section>
 
       <section className="mb-6">
-        <h2 className="text-xl font-semibold text-white mb-3">
+        <h2 className="text-xl font-semibold text-black mb-3">
           {content.security}
         </h2>
         <p>{content.security_text}</p>
       </section>
 
       <section className="mb-6">
-        <h2 className="text-xl font-semibold text-white mb-3">
+        <h2 className="text-xl font-semibold text-black mb-3">
           {content.children}
         </h2>
         <p>{content.children_text}</p>
       </section>
 
       <section className="mb-6">
-        <h2 className="text-xl font-semibold text-white mb-3">
+        <h2 className="text-xl font-semibold text-black mb-3">
           {content.links}
         </h2>
         <p>{content.links_text}</p>
       </section>
 
       <section className="mb-6">
-        <h2 className="text-xl font-semibold text-white mb-3">
+        <h2 className="text-xl font-semibold text-black mb-3">
           {content.updates}
         </h2>
         <p>{content.updates_text}</p>
       </section>
 
       <section className="mb-6">
-        <h2 className="text-xl font-semibold text-white mb-3">
+        <h2 className="text-xl font-semibold text-black mb-3">
           {content.contact}
         </h2>
         <p>
           {activeLanguage.phone}:{" "}
-          <a href="tel:+995597233355" className="text-gray-400">
-            +995597233355
+          <a href="tel:+995599484604" className="text-gray-400">
+            +995599484604
           </a>
         </p>
 
         <p>
           {content.email}:{" "}
-          <a href="mailto:sarko.events@gmail.com" className="text-gray-400">
-            sarko.events@gmail.com
+          <a href="mailto:sensa.retain@gmail.com" className="text-gray-400">
+            sensa.retain@gmail.com
           </a>
         </p>
         <p>
           {content.website}:{" "}
           <a href="https://www.sarkoevents.com" className="text-gray-400">
-            www.sarkoevents.com
+            www.sensa.ge
           </a>
         </p>
       </section>
