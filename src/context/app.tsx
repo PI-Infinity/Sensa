@@ -111,7 +111,7 @@ export const AppContextWrapper: React.FC<contextProps> = ({ children }) => {
   ];
   // mobile menu state
   const [mobileMenu, setMobileMenu] = useState(false);
-  //
+
   useEffect(() => {
     if (mobileMenu) {
       document.body.style.overflowY = "hidden";
