@@ -7,7 +7,7 @@ const { connectDB } = require("../src/app/db");
     console.log("✅ MongoDB connection test passed");
     process.exit(0);
   } catch (err) {
-    console.error("❌ MongoDB connection test failed:", err.message);
+    console.error("❌ MongoDB connection test failed:");
     process.exit(1);
   }
 })();
