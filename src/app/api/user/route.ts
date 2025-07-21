@@ -43,6 +43,7 @@ export async function PATCH(req: Request) {
       colors: body.colors,
       logo: body.logo,
     };
+    const { User } = await import("@/app/models/userModel");
     await User.updateOne({ clerkId: userId }, mapped);
 
     return NextResponse.json({ success: true });
