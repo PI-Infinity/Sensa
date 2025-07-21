@@ -1,4 +1,4 @@
-import { connectDB } from "@/app/db";
+import { connectDB } from "../../db";
 import { Feedback } from "@/app/models/feedbackModel";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
