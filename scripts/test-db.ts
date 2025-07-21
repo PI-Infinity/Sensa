@@ -1,5 +1,5 @@
 // scripts/test-db.js
-const { connectDB } = require("../src/app/db");
+import { connectDB } from "../src/app/db";
 
 (async () => {
   try {

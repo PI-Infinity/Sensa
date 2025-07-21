@@ -45,6 +45,7 @@
     "@types/react-color": "^3.0.13",
     "@types/react-headroom": "^3.2.3",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "5.8.3"
   }
 }
