@@ -1,4 +1,5 @@
 // scripts/test-db.js
+import "dotenv/config";
 import { connectDB } from "../src/app/db";
 
 (async () => {
