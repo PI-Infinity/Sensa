@@ -1,0 +1,26 @@
+"use client";
+import { useAppContext } from "@/context/app";
+import Image from "next/image";
+import { FaQrcode } from "react-icons/fa";
+import { MdQrCode, MdQrCode2 } from "react-icons/md";
+
+export const Loading = () => {
+  const { loading, theme } = useAppContext();
+
+  return (
+    <div
+      style={{ display: loading ? "flex" : "none" }}
+      className="fixed bg-white w-full z-40 h-full flex-col items-center justify-center"
+    >
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl flex items-center gap-1">
+        <MdQrCode2 size={42} color="#111" />
+        <p
+          style={{ color: "#111" }}
+          className="font-mineFont text-4xl font-bold"
+        >
+          Sensa
+        </p>
+      </div>
+    </div>
+  );
+};
