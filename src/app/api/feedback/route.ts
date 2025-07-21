@@ -23,11 +23,11 @@ export async function GET(req: NextRequest) {
     const today = new Date(
       Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
     );
-    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-    const last30Days = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const tomorrow = new Date(today.getTime() + 86400000);
+    const last30Days = new Date(today.getTime() - 30 * 86400000);
 
-    // ფილტრის პირობა
-    const baseMatch: any = { userId: userId };
+    const baseMatch: any = { userId };
+
     if (filter === "stars") baseMatch.stars = { $type: ["int", "double"] };
     else if (filter === "comment")
       baseMatch.comment = { $exists: true, $ne: "" };
@@ -35,71 +35,37 @@ export async function GET(req: NextRequest) {
     else if (filter === "today")
       baseMatch.createdAt = { $gte: today, $lt: tomorrow };
 
-    // ფიდბექების სიის წამოღება
-    const feedbacks = await Feedback.find(baseMatch)
+    const feedbacksPromise = Feedback.find(baseMatch)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
+      .select("comment emojy stars createdAt status") // მხოლოდ საჭირო ველები
       .lean();
 
-    // სტატისტიკა ერთდროულად aggregation-ით
-    const [stats] = await Feedback.aggregate([
-      { $match: { userId: userId } },
+    const statsPromise = Feedback.aggregate([
+      { $match: { userId } },
       {
         $facet: {
-          all: [{ $match: { userId: userId } }, { $count: "total" }],
-          unread: [
-            {
-              $match: {
-                userId: userId,
-                status: "unread",
-              },
-            },
-            { $count: "count" },
-          ],
+          all: [{ $count: "total" }],
+          unread: [{ $match: { status: "unread" } }, { $count: "count" }],
           today: [
-            {
-              $match: {
-                userId: userId,
-                createdAt: { $gte: today, $lt: tomorrow },
-              },
-            },
+            { $match: { createdAt: { $gte: today, $lt: tomorrow } } },
             { $count: "count" },
           ],
           lastMonth: [
-            {
-              $match: {
-                userId: userId,
-                createdAt: { $gte: last30Days },
-              },
-            },
+            { $match: { createdAt: { $gte: last30Days } } },
             { $count: "count" },
           ],
           comment: [
-            {
-              $match: {
-                userId: userId,
-                comment: { $exists: true, $ne: "" },
-              },
-            },
+            { $match: { comment: { $exists: true, $ne: "" } } },
             { $count: "count" },
           ],
           emojy: [
-            {
-              $match: {
-                userId: userId,
-                emojy: { $exists: true, $ne: "" },
-              },
-            },
+            { $match: { emojy: { $exists: true, $ne: "" } } },
             { $count: "count" },
           ],
           stars: [
-            {
-              $match: {
-                userId: userId,
-                stars: { $type: ["int", "double"] },
-              },
-            },
+            { $match: { stars: { $type: ["int", "double"] } } },
             {
               $group: {
                 _id: null,
@@ -109,43 +75,35 @@ export async function GET(req: NextRequest) {
             },
           ],
           emojiBreakdown: [
-            {
-              $match: {
-                userId: userId,
-                emojy: { $exists: true, $ne: "" },
-              },
-            },
-            {
-              $group: {
-                _id: "$emojy",
-                count: { $sum: 1 },
-              },
-            },
-            {
-              $project: {
-                emojy: "$_id",
-                count: 1,
-                _id: 0,
-              },
-            },
+            { $match: { emojy: { $exists: true, $ne: "" } } },
+            { $group: { _id: "$emojy", count: { $sum: 1 } } },
+            { $project: { emojy: "$_id", count: 1, _id: 0 } },
           ],
         },
       },
     ]);
-    const filteredCount = await Feedback.countDocuments(baseMatch);
+
+    const filteredCountPromise = Feedback.countDocuments(baseMatch);
+
+    const [feedbacks, [stats], filteredCount] = await Promise.all([
+      feedbacksPromise,
+      statsPromise,
+      filteredCountPromise,
+    ]);
+
     return NextResponse.json({
       status: "success",
       feedbacks,
-      totalFeedbacks: stats.all[0]?.total || 0,
-      filteredCount: filteredCount,
-      unreadCount: stats.unread[0]?.count || 0,
-      todayCount: stats.today[0]?.count || 0,
-      lastMonthCount: stats.lastMonth[0]?.count || 0,
-      emojiCount: stats.emojy[0]?.count || 0,
-      commentCount: stats.comment[0]?.count || 0,
-      starsCount: stats.stars[0]?.count || 0,
-      starsAvg: stats.stars[0]?.avg || 0,
-      emojiBreakdown: stats.emojiBreakdown || [],
+      totalFeedbacks: stats?.all?.[0]?.total || 0,
+      filteredCount,
+      unreadCount: stats?.unread?.[0]?.count || 0,
+      todayCount: stats?.today?.[0]?.count || 0,
+      lastMonthCount: stats?.lastMonth?.[0]?.count || 0,
+      emojiCount: stats?.emojy?.[0]?.count || 0,
+      commentCount: stats?.comment?.[0]?.count || 0,
+      starsCount: stats?.stars?.[0]?.count || 0,
+      starsAvg: stats?.stars?.[0]?.avg || 0,
+      emojiBreakdown: stats?.emojiBreakdown || [],
     });
   } catch (error) {
     console.error("❌ Error fetching feedbacks:", error);
