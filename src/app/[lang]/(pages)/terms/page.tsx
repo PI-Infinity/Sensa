@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { useAppContext } from "@/context/app";
 import { Suspense } from "react";
 
-export const termsContent: any = {
+const termsContent: any = {
   en: {
     title: "Terms of Use",
     last_update: "Last Updated",

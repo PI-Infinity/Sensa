@@ -6,15 +6,15 @@ export async function generateMetadata(): Promise<Metadata> {
   const lang = cookieStore.get("language")?.value || "en"; // 🔥 ენის წაკითხვა ქუქიდან
 
   const titles: Record<string, string> = {
-    en: "Terms & Conditions | Sarko Events",
-    ka: "წესები და პირობები | Sarko Events",
-    ru: "Условия использования | Sarko Events",
+    en: "Terms & Conditions | Sensa",
+    ka: "წესები და პირობები | Sensa",
+    ru: "Условия использования | Sensa",
   };
 
   const descriptions: Record<string, string> = {
-    en: "Read our Terms & Conditions to understand the rules of using Sarko Events. Your rights and responsibilities explained in detail.",
-    ka: "წაიკითხეთ ჩვენი წესები და პირობები, რათა გაიგოთ Sarko Events-ის გამოყენების წესები. აქ დეტალურადაა აღწერილი თქვენი უფლებები და ვალდებულებები.",
-    ru: "Прочитайте наши условия использования, чтобы понять правила работы с Sarko Events. Ваши права и обязанности подробно объяснены.",
+    en: "Read our Terms & Conditions to understand the rules of using Sensa. Your rights and responsibilities explained in detail.",
+    ka: "წაიკითხეთ ჩვენი წესები და პირობები, რათა გაიგოთ Sensa-ს გამოყენების წესები. დეტალურადაა აღწერილი თქვენი უფლებები და ვალდებულებები.",
+    ru: "Прочитайте наши условия использования, чтобы понять правила работы с Sensa. Ваши права и обязанности подробно объяснены.",
   };
 
   return {
@@ -23,9 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: titles[lang] || titles["en"],
       description: descriptions[lang] || descriptions["en"],
-      url: "https://sarkoevents.shop/terms",
+      url: "https://sensa.ge/terms",
       type: "website",
-      siteName: "Sarko Events",
+      siteName: "Sensa",
       images: [
         {
           url: "/banner.webp",
@@ -43,13 +43,13 @@ export async function generateMetadata(): Promise<Metadata> {
           rel: "icon",
           type: "image/png",
           sizes: "32x32",
-          url: "/sarko-favicon.png",
+          url: "/qr.jpg",
         },
         {
           rel: "icon",
           type: "image/png",
           sizes: "16x16",
-          url: "/sarko-favicon.png",
+          url: "/qr.jpg",
         },
       ],
     },

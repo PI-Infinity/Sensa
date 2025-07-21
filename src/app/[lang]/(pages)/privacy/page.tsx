@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { useAppContext } from "@/context/app";
 import { Suspense } from "react";
 
-export const privacyContent: any = {
+const privacyContent: any = {
   en: {
     title: "Privacy Policy",
     last_update: "Last Updated",
