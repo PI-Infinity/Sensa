@@ -1,5 +1,5 @@
 // scripts/test-db.js
-const { connectDB } = require("../lib/mongodb");
+const { connectDB } = require("../src/app/db");
 
 (async () => {
   try {
