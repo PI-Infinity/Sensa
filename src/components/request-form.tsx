@@ -30,7 +30,7 @@ const RequestForm = () => {
 
     try {
       const response = await axios.post("/api/send-email", {
-        to: "tornike.pirtakhia@gmail.com",
+        to: email,
         subject: "New Request",
         text: JSON.stringify({
           name: name,
@@ -66,32 +66,6 @@ const RequestForm = () => {
     }
   }
 
-  const eventTypes = [
-    {
-      id: "wedding",
-      label: activeLanguage.wedding,
-    },
-    {
-      id: "corporation",
-      label: activeLanguage.corporation,
-    },
-    {
-      id: "presentation",
-      label: activeLanguage.presentation,
-    },
-    {
-      id: "conferences",
-      label: activeLanguage.conference,
-    },
-    {
-      id: "teambuildings",
-      label: activeLanguage.teambuilding,
-    },
-    {
-      id: "other",
-      label: activeLanguage.other,
-    },
-  ];
   return (
     <div className="flex flex-col gap-2 w-full desktop:w-[720px] desktop:py-8">
       <h3
@@ -142,7 +116,7 @@ const RequestForm = () => {
         <div className="h-12  w-full rounded-full mt-6 shadow-xl">
           <Button
             title={activeLanguage.sendRequest}
-            background={theme.text}
+            background="linear-gradient(45deg, rgba(0, 183, 255, 1) 0%, rgba(180, 87, 199, 1) 50%, rgba(237, 209, 83, 1) 100%)"
             color={theme.main}
             loading={loading}
             onClick={() => sendEmail()}
