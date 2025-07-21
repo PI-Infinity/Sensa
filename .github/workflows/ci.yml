@@ -1,0 +1,41 @@
+# .github/workflows/ci.yml
+name: CI for Sensa Project
+
+on:
+  push:
+    branches: [PI-Infinity]
+  pull_request:
+    branches: [PI-Infinity]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🔍 Check MONGODB_URI
+        run: |
+          if [ -z "$MONGODB_URI" ]; then
+            echo "❌ MONGODB_URI not set"; exit 1;
+          else
+            echo "✅ MONGODB_URI is set"
+          fi
+
+      - name: 🧱 Build project
+        run: npm run build
+
+      - name: 🧪 Run DB test
+        run: node scripts/test-db.js
