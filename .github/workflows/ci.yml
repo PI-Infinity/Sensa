@@ -40,4 +40,4 @@ jobs:
         run: npm run build
 
       - name: 🧪 Run DB test
-        run: node scripts/test-db.tsx
+        run: node scripts/test-db.ts
