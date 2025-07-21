@@ -48,7 +48,7 @@ const MobileMenu = () => {
       className={`fixed z-50 top-0 ${
         mobileMenu ? "right-0 opacity-[1]" : "right-[-100%] opacity-[0.5]"
       } h-screen w-full slide-in-left desktop:hidden flex flex-col gap-[48px]
-    text-textlight text-[16px] font-custom font-[600] px-[10%] pt-[40px]`}
+    text-textlight text-[16px] font-custom px-[10%] pt-[40px]`}
     >
       <div className="font-secondFont flex flex-col gap-4 w-full">
         {menuItems.map((item: any) => {
