@@ -68,7 +68,6 @@ export const Feedbacks = ({ data, setData }: any) => {
   }, [data?._id, filter]);
 
   const loadMore = async () => {
-    console.log("run....");
     if (!data?._id) return;
 
     // თუ ჯერ არ ვიცით რამდენია სულ, არ ვტვირთავთ

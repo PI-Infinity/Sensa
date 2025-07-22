@@ -1,0 +1,284 @@
+// server.ts
+import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
+import next from "next";
+import mongoose from "mongoose";
+import { connectDB } from "@/app/db";
+import { ClerkExpressWithAuth, requireAuth } from "@clerk/clerk-sdk-node";
+import { Feedback } from "@/app/models/feedbackModel";
+
+const dev = process.env.NODE_ENV !== "production";
+const app = next({ dev });
+const handle = app.getRequestHandler();
+
+app.prepare().then(async () => {
+  const server = express();
+
+  await connectDB();
+  console.log("✅ Connected to MongoDB");
+
+  server.use(express.json());
+  server.use(ClerkExpressWithAuth() as any);
+
+  // 🔁 Health check
+  server.get("/api/ping", (req, res) => {
+    res.json({ message: "pong" });
+  });
+
+  // 🔐 GET current authenticated user
+  server.get(
+    "/api/user",
+    requireAuth(async (req: any, res: any) => {
+      const userId = req.auth.userId;
+      if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+      const { User } = await import("@/app/models/userModel");
+      const user: any = await User.findOne({ clerkId: userId }).lean();
+
+      if (!user) return res.status(404).json({ error: "User not found" });
+
+      const unreadCount = await Feedback.countDocuments({
+        userId: user._id.toString(),
+        status: "unread",
+      });
+
+      return res.json({ ...user, unreadFeedbacksCount: unreadCount });
+    })
+  );
+
+  // 🔐 PATCH current authenticated user
+  server.patch(
+    "/api/user",
+    requireAuth(async (req: any, res: any) => {
+      const { User } = await import("@/app/models/userModel");
+      const userId = req.auth.userId;
+      if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+      const { businessTitle, businessSlogan, feedbackTypes, colors, logo } =
+        req.body;
+
+      await User.updateOne(
+        { clerkId: userId },
+        { businessTitle, businessSlogan, feedbackTypes, colors, logo }
+      );
+
+      return res.json({ success: true });
+    })
+  );
+
+  // 🔍 Public GET by user ID (no auth)
+  server.get("/api/user/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: "Invalid userId" });
+      }
+
+      const { User } = await import("@/app/models/userModel");
+      const user = await User.findById(id).lean();
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const { feedbacks, ...safeUser }: any = user;
+      return res.json(safeUser);
+    } catch (err: any) {
+      console.error("❌ GET /api/user/:id error:", err.message);
+      return res.status(500).json({ error: "Internal error" });
+    }
+  });
+
+  // GET /api/feedback?userId=...&filter=...&page=...&limit=...
+  server.get("/api/feedback", async (req, res) => {
+    try {
+      const {
+        userId,
+        filter = "all",
+        page = "1",
+        limit = "15",
+      } = req.query as any;
+      const skip = (parseInt(page) - 1) * parseInt(limit);
+
+      if (!userId)
+        return res.status(400).json({ error: "Invalid or missing userId" });
+
+      const now = new Date();
+      const today = new Date(
+        Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+      );
+      const tomorrow = new Date(today.getTime() + 86400000);
+      const last30Days = new Date(today.getTime() - 30 * 86400000);
+
+      const baseMatch: any = { userId };
+
+      if (filter === "stars") baseMatch.stars = { $type: ["int", "double"] };
+      else if (filter === "comment")
+        baseMatch.comment = { $exists: true, $ne: "" };
+      else if (filter === "emojy") baseMatch.emojy = { $exists: true, $ne: "" };
+      else if (filter === "today")
+        baseMatch.createdAt = { $gte: today, $lt: tomorrow };
+
+      const feedbacksPromise = Feedback.find(baseMatch)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+        .select("comment emojy stars createdAt status")
+        .lean();
+
+      const statsPromise = Feedback.aggregate([
+        { $match: { userId } },
+        {
+          $facet: {
+            all: [{ $count: "total" }],
+            unread: [{ $match: { status: "unread" } }, { $count: "count" }],
+            today: [
+              { $match: { createdAt: { $gte: today, $lt: tomorrow } } },
+              { $count: "count" },
+            ],
+            lastMonth: [
+              { $match: { createdAt: { $gte: last30Days } } },
+              { $count: "count" },
+            ],
+            comment: [
+              { $match: { comment: { $exists: true, $ne: "" } } },
+              { $count: "count" },
+            ],
+            emojy: [
+              { $match: { emojy: { $exists: true, $ne: "" } } },
+              { $count: "count" },
+            ],
+            stars: [
+              { $match: { stars: { $type: ["int", "double"] } } },
+              {
+                $group: {
+                  _id: null,
+                  avg: { $avg: "$stars" },
+                  count: { $sum: 1 },
+                },
+              },
+            ],
+            emojiBreakdown: [
+              { $match: { emojy: { $exists: true, $ne: "" } } },
+              { $group: { _id: "$emojy", count: { $sum: 1 } } },
+              { $project: { emojy: "$_id", count: 1, _id: 0 } },
+            ],
+          },
+        },
+      ]);
+
+      const filteredCountPromise = Feedback.countDocuments(baseMatch);
+
+      const [feedbacks, [stats], filteredCount] = await Promise.all([
+        feedbacksPromise,
+        statsPromise,
+        filteredCountPromise,
+      ]);
+
+      return res.json({
+        status: "success",
+        feedbacks,
+        totalFeedbacks: stats?.all?.[0]?.total || 0,
+        filteredCount,
+        unreadCount: stats?.unread?.[0]?.count || 0,
+        todayCount: stats?.today?.[0]?.count || 0,
+        lastMonthCount: stats?.lastMonth?.[0]?.count || 0,
+        emojiCount: stats?.emojy?.[0]?.count || 0,
+        commentCount: stats?.comment?.[0]?.count || 0,
+        starsCount: stats?.stars?.[0]?.count || 0,
+        starsAvg: stats?.stars?.[0]?.avg || 0,
+        emojiBreakdown: stats?.emojiBreakdown || [],
+      });
+    } catch (error) {
+      console.error("❌ Error fetching feedbacks:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // POST /api/feedback
+  server.post("/api/feedback", async (req, res) => {
+    try {
+      const { userId, stars, emojy, comment, createdAt } = req.body;
+      if (!userId) return res.status(400).json({ error: "Missing userId" });
+
+      const feedbackData: any = {
+        userId,
+        status: "unread",
+        createdAt: createdAt ? new Date(createdAt) : new Date(),
+      };
+      if (stars !== undefined) feedbackData.stars = stars;
+      if (emojy !== undefined) feedbackData.emojy = emojy;
+      if (comment && comment.trim()) feedbackData.comment = comment.trim();
+
+      await Feedback.create(feedbackData);
+      return res.json({ status: "success" });
+    } catch (error) {
+      console.error("❌ Error adding feedback:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // PATCH /api/feedback
+  server.patch("/api/feedback", async (req, res) => {
+    try {
+      const { userId, feedbackId } = req.body;
+      if (!userId || !feedbackId)
+        return res.status(400).json({ error: "Missing userId or feedbackId" });
+      if (!mongoose.Types.ObjectId.isValid(feedbackId)) {
+        return res.status(400).json({ error: "Invalid feedbackId" });
+      }
+
+      const updated = await Feedback.findOneAndUpdate(
+        { _id: feedbackId, userId },
+        { $set: { status: "read" } },
+        { new: true }
+      );
+
+      if (!updated)
+        return res
+          .status(404)
+          .json({ error: "Feedback not found or already read" });
+
+      return res.json({ status: "success" });
+    } catch (error) {
+      console.error("❌ Error updating feedback:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // DELETE /api/feedback
+  server.delete("/api/feedback", async (req, res) => {
+    try {
+      const { userId, feedbackId } = req.body;
+      if (!userId || !feedbackId)
+        return res.status(400).json({ error: "Missing userId or feedbackId" });
+      if (!mongoose.Types.ObjectId.isValid(feedbackId)) {
+        return res.status(400).json({ error: "Invalid feedbackId" });
+      }
+
+      const deleted = await Feedback.findOneAndDelete({
+        _id: feedbackId,
+        userId,
+      });
+
+      if (!deleted)
+        return res.status(404).json({ error: "Feedback not found" });
+
+      return res.json({ status: "success" });
+    } catch (error) {
+      console.error("❌ Error deleting feedback:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // All other routes go to Next.js
+  server.all(/^\/.*/, (req, res) => handle(req, res));
+
+  const PORT = parseInt(process.env.PORT || "3000", 10);
+  server.listen(PORT, () => {
+    console.log(`🚀 Ready on http://localhost:${PORT}`);
+  });
+});

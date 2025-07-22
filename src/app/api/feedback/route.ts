@@ -1,3 +1,4 @@
+import { connectDB } from "@/app/db";
 import { Feedback } from "@/app/models/feedbackModel";
 import { User } from "@/app/models/userModel";
 import mongoose from "mongoose";
@@ -5,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
+    await connectDB();
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
     const filter = searchParams.get("filter") || "all";
@@ -116,6 +118,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB();
     const data = await req.json();
 
     const { userId, stars, emojy, comment, createdAt } = data;
@@ -149,6 +152,7 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
+    await connectDB();
     const { userId, feedbackId } = await req.json();
 
     if (!userId || !feedbackId) {
@@ -195,6 +199,7 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    await connectDB();
     const { userId, feedbackId } = await req.json();
 
     if (!userId || !feedbackId) {

@@ -65,7 +65,6 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   const { userId }: any = await auth();
-  console.log(userId);
 
   if (!userId) {
     // Add custom logic to run before redirecting

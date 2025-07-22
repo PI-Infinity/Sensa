@@ -5,10 +5,10 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
+    await connectDB();
     const { userId } = await auth();
     if (!userId)
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    await connectDB();
     const { User } = await import("@/app/models/userModel");
     const user: any = await User.findOne({ clerkId: userId }).lean();
 
@@ -29,6 +29,7 @@ export async function GET() {
 
 export async function PATCH(req: Request) {
   try {
+    await connectDB();
     const { userId } = await auth();
     if (!userId)
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
