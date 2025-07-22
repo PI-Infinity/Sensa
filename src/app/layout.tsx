@@ -11,7 +11,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { cookies } from "next/headers"; // 🔥 ენების წაკითხვა სერვერის მხარეს
 import "./globals.css";
-import { connectDB } from "./db";
 
 // 🔥 `generateMetadata()` სერვერის მხარეს ქმნის დინამიურ `metadata`
 export async function generateMetadata(): Promise<Metadata> {
@@ -73,7 +72,6 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   // await createIndexes();
-  await connectDB();
 
   return (
     <ClerkProvider

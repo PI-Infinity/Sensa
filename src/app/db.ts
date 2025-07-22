@@ -20,7 +20,7 @@ export async function connectDB() {
       .connect(MONGODB_URI, {
         autoIndex: true,
         writeConcern: { w: "majority" },
-        serverSelectionTimeoutMS: 5000,
+        serverSelectionTimeoutMS: 3000,
       })
       .then((mongoose) => {
         console.log("✅ Connected to MongoDB");

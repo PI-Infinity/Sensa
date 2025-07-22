@@ -8,6 +8,7 @@ export async function GET() {
     const { userId } = await auth();
     if (!userId)
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    await connectDB();
     const { User } = await import("@/app/models/userModel");
     const user: any = await User.findOne({ clerkId: userId }).lean();
 
