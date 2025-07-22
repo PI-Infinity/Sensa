@@ -145,6 +145,24 @@ export const AppContextWrapper: React.FC<contextProps> = ({ children }) => {
    */
   const [alert, setAlert] = useState({ active: false, type: "", text: "" });
 
+  // user data
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/user");
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.error || "Failed to fetch user");
+        setUserData(data);
+      } catch (err) {
+        console.error("❌ Error loading user:", err);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <>
       <AppContext.Provider
@@ -165,6 +183,8 @@ export const AppContextWrapper: React.FC<contextProps> = ({ children }) => {
           alert,
           setAlert,
           setLoading,
+          userData,
+          setUserData,
         }}
       >
         {children}

@@ -9,28 +9,10 @@ import { CreateQR } from "./states/createQR";
 import { MdClose } from "react-icons/md";
 
 const Dashboard = () => {
-  const { isMobile, loading } = useAppContext();
+  const { isMobile, loading, userData, setUserData } = useAppContext();
   const [activeState, setActiveState] = useState("feedbacks");
 
-  const [userData, setUserData] = useState<any>(null);
   const [loadDatta, setLoadData] = useState(true);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch("/api/user");
-        const data = await res.json();
-        if (!res.ok) throw new Error(data?.error || "Failed to fetch user");
-        setUserData(data);
-      } catch (err) {
-        console.error("❌ Error loading user:", err);
-      } finally {
-        setLoadData(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   const [openMenu, setOpenMenu] = useState(false);
   return (
