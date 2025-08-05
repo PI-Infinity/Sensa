@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { User } from "@/app/models/userModel";
 import mongoose from "mongoose";
+import { connectDB } from "@/app/db";
 
 export async function GET(
   req: NextRequest,
@@ -12,8 +13,8 @@ export async function GET(
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return NextResponse.json({ error: "Invalid userId" }, { status: 400 });
     }
-
-    const user = await User.findById(userId).lean();
+    await connectDB();
+    const user = await User.findOne({ _id: userId }).lean();
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
